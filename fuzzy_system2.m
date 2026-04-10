@@ -1,0 +1,44 @@
+fis = mamfis('Name','StudentPerformance');
+fis = addInput(fis,[0 100],'Name','Attendance');
+fis = addMF(fis,'Attendance','trimf',[0 0 50],'Name','Low');
+fis = addMF(fis,'Attendance','trimf',[30 50 70],'Name','Medium');
+fis = addMF(fis,'Attendance','trimf',[60 100 100],'Name','High');
+fis = addInput(fis,[0 100],'Name','Assignment');
+fis = addMF(fis,'Assignment','trimf',[0 0 50],'Name','Poor');
+fis = addMF(fis,'Assignment','trimf',[30 50 70],'Name','Average');
+fis = addMF(fis,'Assignment','trimf',[60 100 100],'Name','Good');
+fis = addInput(fis,[0 100],'Name','Test');
+fis = addMF(fis,'Test','trimf',[0 0 50],'Name','Low');
+fis = addMF(fis,'Test','trimf',[30 50 70],'Name','Medium');
+fis = addMF(fis,'Test','trimf',[60 100 100],'Name','High');
+fis = addOutput(fis,[0 100],'Name','Performance');
+fis = addMF(fis,'Performance','trimf',[0 0 40],'Name','Poor');
+fis = addMF(fis,'Performance','trimf',[30 50 70],'Name','Average');
+fis = addMF(fis,'Performance','trimf',[60 100 100],'Name','Good');
+rules = [
+    3 3 3 3 1 1;
+    2 2 2 2 1 1;
+    1 1 1 1 1 1;
+];
+fis = addRule(fis,rules);
+input = [75 80 70];
+out1 = evalfis(fis,input);
+disp(['Fuzzy Output: ', num2str(out1)]);
+data = [
+    90 85 88 90;
+    80 78 75 80;
+    70 65 60 65;
+    60 55 50 55;
+    50 45 40 45;
+];
+initfis = genfis1(data,3,'trimf','linear');
+[trnFis, error] = anfis(data,initfis,20);
+test = [75 80 70];
+out2 = evalfis(trnFis,test);
+disp(['ANFIS Output: ', num2str(out2)]);
+figure; plotmf(fis,'input',1); title('Attendance MF');
+figure; plotmf(fis,'output',1); title('Performance MF');
+figure; plot(error);
+title('Training Error');
+xlabel('Epoch'); ylabel('Error');
+z
